@@ -93,3 +93,202 @@ Features:
 - Overfitting Strength - how much the model overfits;
 - Leaning Rate - how fast the model learn
 - Current Epoch slider
+
+**Layer of Neurons**
+
+![layer of neurons](https://github.com/user-attachments/assets/6c9f2b11-e0c8-4599-822e-3664dd691b32)
+
+Image shows how multiple neurons work together in a single layer.
+
+Input: [1, 2, 3, 2.5]
+
+Weights: 4 x 3 = 12 total weights
+- Neuron 0 weights: [0.2, 0.8, -0.5, 1.0]
+- Neuron 1 weights: [0.5, -0.91, 0.26, -0.5]
+- Neuron 2 weights: [-0.26, -0.27, 0.17, 0.87]
+
+Biases: [2, 3, 0.5]
+
+Calculation:
+
+Neuron 0: (1 × 0.2) + (2 × 0.8) + (3 × -0.5) + (2.5 × 1.0) + 2 = 4.8. After activation → output0
+
+Neuron 1: (1 × 0.5) + (2 × -0.91) + (3 × 0.26) + (2.5 × -0.5) + 3 = 1.21. After activation → output1
+
+Neuron 2: (1 × -0.26) + (2 × -0.27) + (3 × 0.17) + (2.5 × 0.87) + 0.5 = 2.385. After activation → output2
+
+Final Output: [output0, output1, output2]
+
+**By Dot Product**
+
+![dot product](https://github.com/user-attachments/assets/d5abc1bd-268d-4d49-b425-f45b56dae879)
+
+```python
+inputs = np.array(inputs)
+weights = np.array([weights0, weights1, weights2])
+biases = np.array([bias0, bias1, bias2])
+outputs = np.dot(weights, input) + biases
+```
+
+**Difference between tensors and lists**
+
+A list is a basic Python data structure that can hold any type of data in a sequence.
+
+```python
+list = [1, 2, 3, 4, 2]
+
+mixed_list = [1, 'hello', 3.14, True]
+
+matrix = [ [1, 2, 3]
+           [4, 4, 6]
+           [4, 8, 9] ]
+
+cube = [ [ [1, 2], [3, 4] ],
+         [  [5, 6], [7, 9] ] ]
+```
+
+Disadvantage: slow for mathematical operations.
+
+A tensor is a multi-dimensional array optimized for numerical computations. 
+
+```python
+# 0D Tensor (Scaler) - A single number
+scaler = np.array(5)
+# shape: ()
+
+# 1D Tensor (Vector) - A list of numbers
+vector = np.array([2, 3, 4, 1, 5])
+# shape: (5, )
+
+# 2D Tensor (Matrix) - A table of numbers
+matrix = np.array( [ [1, 2, 3],
+                     [4, 5, 2],
+                     [3, 9, 8]])
+# shape: (3, 3)
+
+# 3D Tensor - A cube of numbers
+cube = np.array([[[1, 2], [3, 4]], 
+                 [[5, 6], [7, 8]]])
+# shape: (2, 2, 2) like (height, width, rgb channels)
+
+# 4D Tensor - Multiple 3D tensors
+batch = np.array( [[[[1, 2], [3, 4]], [[5, 3], [7, 4]]],
+                   [[[9, 10], [11, 12]], [[13, 14], [15, 16]]]])
+# shape: (2, 2, 2, 2) like a batch of color images
+```
+Key differences
+
+List:
+- Type: python built-in
+- Speed: slow
+- math operations: manual loop needed
+- memory: more memory
+- data type: mixed types allowed
+
+Tensor:
+- type: numpy, pytorch, tensorflow object
+- speed: very fast (GPU accelerated)
+- math operations: built-in (+ - x /)
+- memory: optimized memory
+- data type: single type (all int, all float)
+
+Example:
+```python
+# using lists
+inputs = [1.0, 2.0, 3.0, 2.5]
+weights = [[0.2, 0.8, -0.5, 1.0],
+           [0.5, -0.91, 0.26, -0.5],
+           [-0.26, -0.27, 0.17, 0.87]]
+
+outputs = []
+for neuron_weights in weights:
+   output = 0
+   for i in range(len(inputs):
+      output += inputs[i] * neuron_weights[i]
+   outputs.append(output)
+
+# using tensor
+import numpy as np
+inputs = np.array([1.0, 2.0, 3.0, 2.5])
+weights = np.array([[0.2, 0.8, -0.5, 1.0],
+                    [0.5, -0.91, 0.26, -0.5],
+                    [-0.26, -0.27, 0.17, 0.87]])
+
+outputs = np.dot(weights, inputs) # only one line
+```
+Tensor shape in neural networks
+
+input tensor: (batch_size, features)
+- (32, 784) = 32 image, each with 784 pixels
+
+weight tensor: (output_neurons, input_features)
+- (10, 784) = 10 outputs, 784 inputs each
+
+output tensor: (batch_size, output_neurons)
+- (32, 10) = 32 predictions, 10 classes each
+
+**How matrix multiplication works**
+
+Rule: To multiply matrices, the number of columns in the first matrix must equal the number of rows in the second matrix.
+
+Matrix A (m x n) x Matrix B (n x p) = Result (m x p)
+
+![matrix multiplication](https://github.com/user-attachments/assets/5f749370-9e32-4817-bb63-e75188dfbda0)
+
+Calculation Details
+
+Step 1: Identify the row and column
+- Row 2 from Matrix A: [0.9, -0.4, 0.7, 1.1]
+- Column 2 from Matrix B: [1.5, 1.8, 0.7, 1.3]
+
+Step 2: Multiply corresponding elements
+- 0.9 * 1.5 = 1.35
+- (-0.4) * 1.8 = -0.72
+- 0.7 * 0.7 = 0.49
+- 1.1 * 1.3 = 1.43
+
+Step 3: Sum all products
+- 1.35 + (-0.72) + 0.49 + 1.43 = 2.55
+
+**Activation Function**
+
+1. Linear Activation Function
+   - The simplest activation function where the output equals the input.
+   - Formauls: y = x
+
+![linear fuction](https://github.com/user-attachments/assets/ccab452d-3c6d-477c-abb7-c3b89f8f0b86)
+
+2. Sigmoid Activation Function
+   - Squashes input values between 0 and 1.
+   - Formaula: y = 1 / (1 + e^(-x))
+
+![sigmoid](https://github.com/user-attachments/assets/f6789426-e5db-4d68-a19e-49de09a59590)
+
+3. Rectified Linear Unit Activation Funtion
+   - Returns 0 for negative inputs, and the inputs itself for positive inputs.
+   - Formula: y = max(0, x)
+  
+![relu](https://github.com/user-attachments/assets/6d59b03e-e408-47cf-8e9b-4f1ed362b36a)
+
+4. Step Activation Function
+   - The original perceptron activation function. Outputs 0 or 1 based on threshold.
+   - Formula: y = 1 if x > 0 else 0
+
+![step function](https://github.com/user-attachments/assets/34758df4-114f-49fc-b398-ee546f06194b)
+
+5. Softmax Function
+   - Converts a vector of raw scores (logits) into a probability distribution. All output sum to 1.
+   - Formaula: Softmax (xᵢ) = eˣⁱ / Σⱼ eˣʲ
+  
+![softmax](https://github.com/user-attachments/assets/2c3d5a0a-d5e0-47e7-88c2-8a360408807f)
+
+**Accuracy Calculation**
+
+Accuracy measures how often the model's predictions match the true labels. It is calculated as the fraction of correct predictions.
+
+```python
+predictions = np.argmax(softmax_output, axis=1) # take the class with highest probability
+accuracy = np.mean(predictions == class_targets)
+```
+
+argmax() is a function that returns the indices of the maximum element along a specified axis in a given array.
